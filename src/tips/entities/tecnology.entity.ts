@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { subtechnologyDocument } from './subTecnology.entity';
+import { SubtechnologyDocument } from './subTecnology.entity';
 
 export type TecnologyDocument = Tecnology & Document;
 
@@ -13,7 +13,25 @@ export class Tecnology {
   name: string;
 
   @Prop({ required: true })
-  subtecnology: subtechnologyDocument[];
+  subtecnology: SubtechnologyDocument[];
+
+  @Prop({ default: null })
+  createdAt: Date | null;
+
+  @Prop()
+  createBy: string;
+
+  @Prop({ default: null })
+  updatedAt: Date | null;
+
+  @Prop()
+  updateBy: string;
+
+  @Prop({ default: null })
+  deletedAt: Date | null;
+
+  @Prop()
+  deleteBy: string;
 }
 
 export const TecnologySchema = SchemaFactory.createForClass(Tecnology);

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TipsModule } from './tips/tips.module';
-import { AuthModule } from './auth/auth.module';
 import { LogsModule } from './logs/logs.module';
-import { LogsService } from './logs/service/logs.service';
-import { LogsController } from './logs/controller/logs.controller';
 import { ConfigModule } from '@nestjs/config';
 import { PersistenceModule } from './persistence/persistence.module';
 import db_config from './persistence/db_config';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/guard/auth.guard';
+import { ApiKeyModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,13 +15,17 @@ import db_config from './persistence/db_config';
       load: [db_config],
       isGlobal: true,
     }),
-    PersistenceModule,
-
     TipsModule,
-    AuthModule,
+    ApiKeyModule,
     LogsModule,
+    PersistenceModule,
   ],
-  controllers: [LogsController],
-  providers: [LogsService],
+  controllers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

@@ -1,19 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
-import { TecnologyDocument } from './tecnology.entity';
+import { Document } from 'mongoose';
 
-export type SubtechnologyDocument = Subtechnology & Document;
+export type LangDocument = Lang & Document;
 
 @Schema({ timestamps: true })
-export class Subtechnology {
+export class Lang {
   @Prop({ required: true, unique: true })
   id: number;
 
   @Prop({ required: true })
   name: string;
-
-  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Tecnology' }] })
-  technology: TecnologyDocument[];
 
   @Prop({ default: null })
   createdAt: Date | null;
@@ -34,4 +30,4 @@ export class Subtechnology {
   deleteBy: string;
 }
 
-export const SubtechnologySchema = SchemaFactory.createForClass(Subtechnology);
+export const LangSchema = SchemaFactory.createForClass(Lang);

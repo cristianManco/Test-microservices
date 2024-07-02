@@ -2,7 +2,6 @@ import {
   IsNotEmpty,
   IsString,
   IsArray,
-  ArrayNotEmpty,
   ArrayMinSize,
   IsNumber,
 } from 'class-validator';

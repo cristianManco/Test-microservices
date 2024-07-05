@@ -1,13 +1,21 @@
 import {
-  IsBoolean,
-  IsNotEmpty,
-  IsOptional,
   IsString,
+  IsNotEmpty,
+  IsBoolean,
+  IsOptional,
   IsArray,
-  IsMongoId,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateTipDto {
+  @IsNumber()
+  @IsNotEmpty()
+  id: number;
+
+  @IsString()
+  @IsOptional()
+  img_url: string;
+
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -25,26 +33,34 @@ export class CreateTipDto {
   available: boolean;
 
   @IsArray()
-  @IsMongoId({ each: true })
-  @IsOptional()
-  level?: string[];
+  @IsNumber({}, { each: true })
+  @IsNotEmpty()
+  level: number[];
 
   @IsArray()
-  @IsMongoId({ each: true })
-  @IsOptional()
-  technology?: string[];
+  @IsNumber({}, { each: true })
+  @IsNotEmpty()
+  technology: number[];
 
   @IsArray()
-  @IsMongoId({ each: true })
-  @IsOptional()
-  subtechnology?: string[];
+  @IsNumber({}, { each: true })
+  @IsNotEmpty()
+  subtechnology: number[];
 
   @IsArray()
-  @IsMongoId({ each: true })
-  @IsOptional()
-  lang?: string[];
+  @IsNumber({}, { each: true })
+  @IsNotEmpty()
+  lang: number[];
 
   @IsString()
   @IsOptional()
   createBy?: string;
+
+  @IsString()
+  @IsOptional()
+  updateBy?: string;
+
+  @IsString()
+  @IsOptional()
+  deleteBy?: string;
 }

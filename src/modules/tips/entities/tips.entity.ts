@@ -1,9 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
-import { TecnologyDocument } from '../../../setup/technology/entity/tecnology.entity';
-import { SubtechnologyDocument } from '../../../setup/subtechnology/entity/subTecnology.entity';
-import { LangDocument } from '../../../setup/lang/entity/lang.entity';
-import { LevelDocument } from '../../../setup/range/entity/levels.entity';
+import { Document } from 'mongoose';
 
 export type TipDocument = Tip & Document;
 
@@ -11,6 +7,9 @@ export type TipDocument = Tip & Document;
 export class Tip {
   @Prop({ required: true, unique: true })
   id: number;
+
+  @Prop()
+  img_url: string;
 
   @Prop({ required: true })
   title: string;
@@ -24,19 +23,17 @@ export class Tip {
   @Prop({ required: true })
   available: boolean;
 
-  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Level' }] })
-  level: LevelDocument[];
+  @Prop({ type: [Number] })
+  level: number[];
 
-  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Tecnology' }] })
-  technology: TecnologyDocument[];
+  @Prop({ type: [Number] })
+  technology: number[];
 
-  @Prop({
-    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Subtecnology' }],
-  })
-  subtechnology: SubtechnologyDocument[];
+  @Prop({ type: [Number] })
+  subtechnology: number[];
 
-  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Lang' }] })
-  lang: LangDocument[];
+  @Prop({ type: [Number] })
+  lang: number[];
 
   @Prop({ default: null })
   createdAt: Date | null;
@@ -58,3 +55,31 @@ export class Tip {
 }
 
 export const TipSchema = SchemaFactory.createForClass(Tip);
+
+TipSchema.virtual('levels', {
+  ref: 'Level',
+  localField: 'level',
+  foreignField: 'id',
+  justOne: false,
+});
+
+TipSchema.virtual('technologies', {
+  ref: 'Technology',
+  localField: 'technology',
+  foreignField: 'id',
+  justOne: false,
+});
+
+TipSchema.virtual('subtechnologies', {
+  ref: 'Subtechnology',
+  localField: 'subtechnology',
+  foreignField: 'id',
+  justOne: false,
+});
+
+TipSchema.virtual('langs', {
+  ref: 'Lang',
+  localField: 'lang',
+  foreignField: 'id',
+  justOne: false,
+});

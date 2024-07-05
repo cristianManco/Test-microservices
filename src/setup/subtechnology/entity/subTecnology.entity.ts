@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
-import { TecnologyDocument } from 'src/setup/technology/entity/tecnology.entity';
+import { Document } from 'mongoose';
 
 export type SubtechnologyDocument = Subtechnology & Document;
 
@@ -12,8 +11,8 @@ export class Subtechnology {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Tecnology' }] })
-  technology: TecnologyDocument[];
+  @Prop({ type: [Number] })
+  technology: number[];
 
   @Prop({ default: null })
   createdAt: Date | null;
@@ -35,3 +34,10 @@ export class Subtechnology {
 }
 
 export const SubtechnologySchema = SchemaFactory.createForClass(Subtechnology);
+
+SubtechnologySchema.virtual('technologies', {
+  ref: 'Technology',
+  localField: 'technology',
+  foreignField: 'id',
+  justOne: false,
+});

@@ -1,13 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { ApiKey, ApiKeyDocument } from '../entities/api-key.entity';
 import { CreateApiKeyDto } from '../dtos/createApiKey.dto';
 import { UpdateApiKeyDto } from '../dtos/updateApiKey.dto';
+// import { Types } from 'mongoose';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @InjectModel(ApiKey.name) private apiKeyModel: Model<ApiKeyDocument>,
   ) {}
@@ -65,6 +73,7 @@ export class AuthService {
     for (const apiKey of apiKeys) {
       const isMatch = await bcrypt.compare(key, apiKey.key);
       if (isMatch) {
+        this.logger.log(`API key matched`);
         await this.updateLastUsed(apiKey.id); // Actualizamos la fecha de último uso
         return true;
       }
@@ -72,10 +81,15 @@ export class AuthService {
     return false;
   }
 
-  private async updateLastUsed(id: string): Promise<void> {
-    await this.apiKeyModel
-      .findByIdAndUpdate(id, { lastUsedAt: new Date() })
-      .exec();
+  private async updateLastUsed(apiKeyId: string): Promise<void> {
+    try {
+      await this.apiKeyModel
+        .findOneAndUpdate({ id: apiKeyId }, { lastUsedAt: new Date() })
+        .exec();
+    } catch (error) {
+      this.logger.error(`Error updating lastUsedAt for id: ${apiKeyId}`, error);
+      throw new InternalServerErrorException('Error updating lastUsedAt');
+    }
   }
 
   private async generateApiKey(): Promise<string> {

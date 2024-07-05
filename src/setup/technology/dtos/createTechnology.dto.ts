@@ -1,38 +1,34 @@
 import {
-  IsNotEmpty,
   IsString,
+  IsNotEmpty,
+  IsOptional,
   IsArray,
-  ArrayMinSize,
   IsNumber,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTechnologyDto {
-  @ApiProperty({ example: '1', description: 'ID único de la tecnología' })
+  @IsNumber()
   @IsNotEmpty()
   id: number;
 
-  @ApiProperty({ example: 'NestJS', description: 'Nombre de la tecnología' })
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   name: string;
 
-  @ApiProperty({
-    example: '[1, 2, 3]',
-    description: 'IDs únicos de las subtecnologías asociadas a esta tecnología',
-    type: [Number],
-  })
-  @IsNotEmpty()
   @IsArray()
-  @ArrayMinSize(1)
   @IsNumber({}, { each: true })
+  @IsOptional()
   subtechnology: number[];
 
-  @ApiProperty({
-    example: 'admin',
-    description: 'Usuario que crea la tecnología',
-  })
-  @IsNotEmpty()
   @IsString()
-  createBy: string;
+  @IsOptional()
+  createBy?: string;
+
+  @IsString()
+  @IsOptional()
+  updateBy?: string;
+
+  @IsString()
+  @IsOptional()
+  deleteBy?: string;
 }

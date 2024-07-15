@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Log, LogDocument } from '../entities/logs.entity';
@@ -10,8 +15,12 @@ export class LogService {
   constructor(@InjectModel(Log.name) private logModel: Model<LogDocument>) {}
 
   async createLog(logData: CreateLogDto): Promise<Log> {
-    const newLog = new this.logModel(logData);
-    return newLog.save();
+    try {
+      const newLog = new this.logModel(logData);
+      return newLog.save();
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async findAll(): Promise<Log[]> {

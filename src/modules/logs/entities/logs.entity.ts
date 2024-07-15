@@ -29,26 +29,23 @@ export class Log {
   @Prop({ required: true })
   statusCode: number;
 
-  @Prop({ required: true })
-  timestamp: Date;
-
-  @Prop({ default: null })
-  createdAt: Date | null;
+  @Prop()
+  userAgent?: string;
 
   @Prop()
-  createBy: string;
+  duration?: number;
+
+  // @Prop({ default: null })
+  // timestamp: Date;
 
   @Prop({ default: null })
-  updatedAt: Date | null;
-
-  @Prop()
-  updateBy: string;
+  createdAt: Date;
 
   @Prop({ default: null })
-  deletedAt: Date | null;
+  updatedAt: Date;
 
-  @Prop()
-  deleteBy: string;
+  @Prop({ default: null })
+  deletedAt: Date;
 }
 
 export const LogSchema = SchemaFactory.createForClass(Log);

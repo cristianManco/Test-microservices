@@ -11,6 +11,9 @@ export class CreateApiKeyDto {
   @IsString()
   system_name: string;
 
+  @IsString()
+  key: string;
+
   @IsOptional()
   @IsDate()
   expiration?: Date;

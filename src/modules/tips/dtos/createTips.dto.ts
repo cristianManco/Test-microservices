@@ -4,63 +4,64 @@ import {
   IsBoolean,
   IsOptional,
   IsArray,
+  IsMongoId,
   IsNumber,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTipDto {
+  @ApiProperty()
   @IsNumber()
-  @IsNotEmpty()
   id: number;
 
-  @IsString()
+  @ApiProperty()
   @IsOptional()
-  img_url: string;
-
   @IsString()
+  img_url?: string;
+
+  @ApiProperty()
   @IsNotEmpty()
+  @IsString()
   title: string;
 
-  @IsString()
+  @ApiProperty()
   @IsNotEmpty()
+  @IsString()
   body: string;
 
-  @IsString()
+  @ApiProperty()
   @IsOptional()
+  @IsString()
   link?: string;
 
-  @IsBoolean()
+  @ApiProperty()
   @IsNotEmpty()
+  @IsBoolean()
   available: boolean;
 
+  @ApiProperty({ type: [String] })
   @IsArray()
-  @IsNumber({}, { each: true })
-  @IsNotEmpty()
-  level: number[];
+  @IsMongoId({ each: true })
+  level: string[];
 
+  @ApiProperty({ type: [String] })
   @IsArray()
-  @IsNumber({}, { each: true })
-  @IsNotEmpty()
-  technology: number[];
+  @IsMongoId({ each: true })
+  technology: string[];
 
+  @ApiProperty({ type: [String] })
   @IsArray()
-  @IsNumber({}, { each: true })
-  @IsNotEmpty()
-  subtechnology: number[];
+  @IsMongoId({ each: true })
+  subtechnology: string[];
 
+  @ApiProperty({ type: [String] })
   @IsArray()
-  @IsNumber({}, { each: true })
-  @IsNotEmpty()
-  lang: number[];
+  @IsMongoId({ each: true })
+  lang: string[];
 
+  @ApiProperty()
   @IsString()
-  @IsOptional()
-  createBy?: string;
-
-  @IsString()
-  @IsOptional()
-  updateBy?: string;
-
-  @IsString()
-  @IsOptional()
-  deleteBy?: string;
+  createBy: string;
 }
+
+export class UpdateTipDto extends CreateTipDto {}

@@ -11,7 +11,7 @@ export class Tecnology {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ type: [Number] })
+  @Prop({ type: [Number], ref: 'Subtechnology' })
   subtechnology: number[];
 
   @Prop({ default: null })

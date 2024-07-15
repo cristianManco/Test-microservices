@@ -11,7 +11,7 @@ export class Subtechnology {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ type: [Number] })
+  @Prop({ type: [Number], ref: 'Tecnology' })
   technology: number[];
 
   @Prop({ default: null })
@@ -36,7 +36,7 @@ export class Subtechnology {
 export const SubtechnologySchema = SchemaFactory.createForClass(Subtechnology);
 
 SubtechnologySchema.virtual('technologies', {
-  ref: 'Technology',
+  ref: 'Tecnology',
   localField: 'technology',
   foreignField: 'id',
   justOne: false,

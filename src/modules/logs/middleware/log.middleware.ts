@@ -1,4 +1,9 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { LogService } from '../service/logs.service';
 import { UserLogService } from '../../userLogs/service/userLogs.service';
@@ -16,27 +21,40 @@ export class LogMiddleware implements NestMiddleware {
     const { method, originalUrl: endpoint, body: requestBody } = req;
     const oldSend = res.send.bind(res); // Binding the response object
 
+    const start = Date.now();
+
     res.send = (body?: any) => {
       // Call the original send method
       oldSend(body);
 
       // Perform async operations
       (async () => {
-        await this.userService.checkRequestLimit(userId);
+        try {
+          await this.userService.checkRequestLimit(userId);
 
-        const logData: CreateLogDto = {
-          ip: req.ip,
-          userId,
-          endpoint,
-          system_name: req.headers['x-system-name'] as string,
-          method,
-          requestBody,
-          responseBody: body,
-          statusCode: res.statusCode,
-          timestamp: new Date(),
-        };
+          const logData: CreateLogDto = {
+            ip: req.ip,
+            userId,
+            endpoint,
+            system_name: req.headers['x-system-name'] as string,
+            method,
+            requestBody,
+            responseBody: body,
+            statusCode: res.statusCode,
+            // timestamp: new Date(),
+            userAgent: req.headers['user-agent'] as string,
+            duration: Date.now() - start,
+          };
 
-        await this.logService.createLog(logData);
+          await this.logService.createLog(logData);
+        } catch (error) {
+          // Optional: handle logging error, e.g., notify admin, retry, etc.
+          console.error('Logging error:', error.message);
+          throw new HttpException(
+            'Failed to log request',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        }
       })();
 
       return res;

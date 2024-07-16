@@ -20,7 +20,7 @@ COPY . .
 RUN npx nest build
 
 # Expone el puerto en el que la aplicación escuchará
-EXPOSE 3000
+EXPOSE 3004
 
 # Define el comando por defecto para ejecutar la aplicación
 CMD ["npx", "nest", "start"]

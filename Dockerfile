@@ -17,7 +17,7 @@ RUN npm install
 COPY . .
 
 # Construye la aplicación NestJS
-RUN nest build
+RUN npm run build
 
 # Expone el puerto en el que la aplicación escuchará
 EXPOSE 3004

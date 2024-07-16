@@ -23,4 +23,4 @@ RUN npx nest build
 EXPOSE 3004
 
 # Define el comando por defecto para ejecutar la aplicación
-CMD ["npx", "nest", "start"]
+CMD ["npx", "nest", "start", "npm", "run", "start:prod"]

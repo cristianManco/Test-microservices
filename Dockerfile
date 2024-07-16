@@ -4,6 +4,9 @@ FROM node:lastest
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /usr/src/app
 
+# Instala el CLI de NestJS globalmente
+RUN npm install -g @nestjs/cli
+
 # Copia el package.json y el package-lock.json al directorio de trabajo
 COPY package*.json ./
 
@@ -17,7 +20,7 @@ RUN npm install express webpack --save-dev
 COPY . .
 
 # Construye la aplicación NestJS
-RUN npm run build
+RUN nest build
 
 # Expone el puerto en el que la aplicación escuchará
 EXPOSE 3000

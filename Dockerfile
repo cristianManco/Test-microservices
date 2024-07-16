@@ -17,10 +17,10 @@ RUN npm install
 COPY . .
 
 # Construye la aplicación NestJS
-RUN nest build
+RUN npx nest build
 
 # Expone el puerto en el que la aplicación escuchará
 EXPOSE 3000
 
 # Define el comando por defecto para ejecutar la aplicación
-CMD ["node", "dist/main"]
+CMD ["npx", "nest", "start"]

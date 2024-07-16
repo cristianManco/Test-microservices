@@ -1,5 +1,5 @@
 # Usa una imagen oficial de Node.js como la base
-FROM node:lastest
+FROM node:latest
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /usr/src/app
@@ -17,10 +17,10 @@ RUN npm install
 COPY . .
 
 # Construye la aplicación NestJS
-RUN npx nest build
+RUN nest build
 
 # Expone el puerto en el que la aplicación escuchará
 EXPOSE 3004
 
 # Define el comando por defecto para ejecutar la aplicación
-CMD ["npx", "nest", "start", "npm", "run", "start:prod"]
+CMD ["npm", "run", "start:prod"]

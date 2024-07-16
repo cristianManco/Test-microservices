@@ -10,6 +10,9 @@ COPY package*.json ./
 # Instala las dependencias del proyecto
 RUN npm install
 
+# Instala las dependencias faltantes mencionadas en las advertencias
+RUN npm install express webpack --save-dev
+
 # Copia el resto del código de la aplicación al directorio de trabajo
 COPY . .
 
